@@ -1,7 +1,7 @@
 
 /** Creation de l'objet Block
  *   Crée le tetromino qui est utilisé dans le jeu
- *   
+ *
 **/
 function Block(type, x, y){
 
@@ -26,7 +26,7 @@ function Block(type, x, y){
     for(var i=0;i<Taille(grid);i++){
       for(var j=0;j<Taille(grid[i]);j++){
         if(grid[i][j][0]){
-            RectanglePlein(bord+j*c, bord+i*c, c, c, this.color);    
+            RectanglePlein(bord+j*c, bord+i*c, c, c, grid[i][j][1]);    
         }
       }
     }
@@ -73,8 +73,14 @@ function Block(type, x, y){
    *   Permet de mettre le tetromino en rotation
    *   @return void
   **/
-  this.rotate = function(){  this.remove();
-    this.rotation = (this.rotation==3)?0:this.rotation+1;
+  this.rotate = function(sens){  this.remove();
+  if(sens==1 && this.rotation==3){
+    this.rotation = 0;
+    }else if(sens==-1 && this.rotation==0){
+    this.rotation = 3;
+    }else{
+    this.rotation+= sens; 
+    }
     this.coord    = tetros[this.type][this.rotation];
     this.draw();
   };
@@ -87,7 +93,6 @@ function Block(type, x, y){
     for(var i=0;i<Taille(this.coord);i++){
       for(var j=0;j<Taille(this.coord[i]);j++){
         next_empty = (grid[i+this.x+1]===undefined)?true:grid[i+this.x+1][this.coord[i][j]+this.y][0];
-        Ecrire(next_empty);
         if(next_empty == true){
           Ecrire("break");
            this.fixe();
@@ -104,7 +109,6 @@ function Block(type, x, y){
     for(var i=0;i<Taille(this.coord);i++){
       for(var j=0;j<Taille(this.coord[i]);j++){
         next_empty = (grid[i+this.x][this.coord[i][j]+this.y+sens]===undefined)?true:grid[i+this.x][this.coord[i][j]+this.y+sens][0];
-        Ecrire(next_empty);
         if(next_empty == true){
           Ecrire("Imposible");
            return false;
