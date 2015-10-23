@@ -1,81 +1,61 @@
-setCanvasFont("Arial", "25px", "bold");
-var tetros = JSON.parse(readFile("data/tetrominos.json"));
-var color  = [ "cyan", "yellow", "purple", "orange", "blue", "red", "lime"];
-var c = 30;   // Coté d'un block en pixel 
-var bord =20; // Position du bord gauche en pixel
-var bord_next = 3*bord+10*c; // Position du bord gauche cadre next
-var block;
-var blockNext = Hasard(7);
-var time;
-
+/* Appelq de fichier Object */
 includeFile("blockObject.js");
 includeFile("graphicObject.js");
-window.onkeyup = function(event){ 
-  switch(event.keyCode){
-      case 16:
-    //Ecrire("Touche MAJ : Rotation gauche (16)");
-    block.rotate(-1);
-      break;
+includeFile("gameObject.js");
 
-      case 35:
-    //    Ecrire("Touche Fin : Rotation droite (35)");
-        block.rotate(1);
-      break;
+/* Initialisation des variables global */
+setCanvasFont("Arial", "25px", "bold"); // Selection de la police
+var tetros = JSON.parse(readFile("data/tetrominos.json")); // Liste de pieces
+var color = ["cyan", "yellow", "purple", "orange", "blue", "red", "lime"]; // Couleur des pièces
+var Graphic = new Graphic(); // Instance de l'objet Graphic
+var Game = new Game(); // Instance de l'objet Graphic
+var routine; // ...
+var stop = false;
 
-      case 37:
-     //   Ecrire("Touche <-  : Deplacement gauche (37)");
-        block.move(-1);
-      break;
+/* Gestion des controles en jeu */
+window.onkeyup = function(event) { // Lorsque qu'une touche est relaché
+  switch (event.keyCode) {
+  case 16:
+    //Touche MAJ : Rotation 90° gauche
+    Game.grid = Game.block.rotate(Game.grid, -1);
+    Game.debugGrid();
+    break;
+  case 35:
+    // Touche Fin : Rotation 90° droite
+    Game.grid = Game.block.rotate(Game.grid, 1);
+    Game.debugGrid();
+    break;
+  case 37:
+    // Touche <- : Deplacement gauche
+    Game.grid = Game.block.move(Game.grid, -1);
+    Game.debugGrid();
 
-      case 39:
-      //  Ecrire("Touche ->  : Deplacement droite (39)");
-        block.move(1);
-     break;
-
-      case 40:
-      //  Ecrire("Touche BAS  : Deplacement Bas (40)");
-        block.down();
-      break;
-    }
+    break;
+  case 39:
+    // Touche -> : Deplacement droite
+    Game.grid = Game.block.move(Game.grid, 1);
+    Game.debugGrid();
+    break;
+  case 40:
+    // Touche BAS : Deplacement bas (soft drop)
+    Game.grid = Game.block.down(Game.grid);
+    Game.debugGrid();
+    break;
+  }
 };
 
-/* Creation de la grille */
-var grid = Tableau(20, 10);
-for(var  i=0;i<Taille(grid);i++){ // On initialise le tableau 
-  for(var j=0;j<Taille(grid[i]);j++){
-  grid[i][j] = Tableau(2);
-    grid[i][j][0] = false;
-  }
-}
-/* /Creation de la grille */
-
-var Interface = new Graphic();
-Interface.initialiser();
-
-function run(){
- block = null;
- time = null; 
- block = new Block(blockNext, bord, bord);
- blockNext = Hasard(7);
- block.draw();
- Interface.drawNextBlock(blockNext);
- time = setInterval(function() { interval(block); }, 1000);
-}
-function interval(b){
-  
-  for(var i=0;i<Taille(grid);i++){
-    var ret = "";
-    for(var j=0;j<Taille(grid[i]);j++){
-      ret += grid[i][j][0] + " : "; 
-    }
-    Ecrire(ret + " fin");
-  }
-  if(b.down() == false){
-    clearInterval(time);
-    run();
+function interval() {
+  Game.block.down(Game.grid);
+  Game.debugGrid();
+  if (stop == true) {
+    stop = false;
+    clearInterval(routine);
+    Game.next();
   }
 }
 
-block = new Block(Hasard(7), bord, bord);
-Interface.drawNextBlock(blockNext);
-time = setInterval(function() { interval(block); }, 1000);
+/* On initialise les Objets nesessaire à la partie */
+Game.initialiser();
+Graphic.initialiser();
+
+Game.start();
