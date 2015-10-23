@@ -38,6 +38,7 @@ function Game() {
   };
 
   this.next = function() {
+    this.checkLine();
     this.block = null;
     routine = null;
     this.block = new Block(this.nextBlock, 0, 0);
@@ -65,4 +66,27 @@ function Game() {
       Ecrire(ret + " fin");
     }
   };
+  
+  this.checkLine = function(){
+    for (var i = 0; i < Taille(Game.grid); i++) {
+      var complete = true;
+      for (var j = 0; j < Taille(Game.grid[i]); j++) {
+        if(Game.grid[i][j][0] == false){
+			complete = false;
+        }
+      }
+      if(complete == true){
+        for (var l=i; l > 0; l--) {
+          if(l != 0){
+              Game.grid[l] = Game.grid[l-1];
+          }else{
+			for(var j = 0; j < Taille(this.grid[l]); j++){
+				this.grid[l][j][0] = false;
+				this.grid[l][j][1] = undefined;
+          }
+        }
+      }
+    }
+    }
+  };    
 }
