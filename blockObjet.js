@@ -13,19 +13,6 @@ function Block(type) {
   this.y = 0;
 
 
-
-  this.test = function() {
-    for (var i = 0; i < Taille(this.coord); i++) {
-      for (var j = 0; j < Taille(this.coord[i]); j++) {
-        if (grid[i + this.x][this.coord[i][j] + this.y][0] == true) {
-          alert("YOU ARE A LOOSER !!!! ");
-          clearInterval(time);
-          Stop("c");
-        }
-      }
-    }
-  };
-  //this.test();
   /** Methode Draw de l'objet Block
    *   Permet de crée le tetromino dans la grille
    *   @return grid La grille modifé
