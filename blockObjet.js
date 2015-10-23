@@ -37,15 +37,8 @@ function Block(type) {
         grid[i + this.x][this.coord[i][j] + this.y][1] = this.color;
       }
     }
+    Graphic.majGrid(grid);
     return grid;
-//		RectanglePlein(this.bordGauche, this.bordHaut, 10*this.c, 20*this.c, "white");
-//    for (var i = 0; i < Taille(grid); i++) {
-//      for (var j = 0; j < Taille(grid[i]); j++) {
-//        if (grid[i][j][0]) {
-//          RectanglePlein(bord + j * c, bord + i * c, c, c, grid[i][j][1]);
-//        }
-//      }
-//    }
   };
   /** Methode Fixe de l'objet Block
    *   @return void
