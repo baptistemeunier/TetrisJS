@@ -9,9 +9,9 @@
 
 function Game() {
 
-  this.score = 40; // Score du joueur
-  this.level = 20; // Niveau du joueur
-  this.lineScore = 20; // Nombre de ligne detruite
+  this.score = 0; // Score du joueur
+  this.level = 0; // Niveau du joueur
+  this.lineScore = 0; // Nombre de ligne detruite
   this.nextBlock = Hasard(7); // Id de la prochaine piéce
   this.grid = Tableau(20, 10); // Grille du plateau de jeu 
   this.block = new Block(Hasard(7), 0, 0);
@@ -45,6 +45,10 @@ function Game() {
     this.block = new Block(this.nextBlock, 0, 0);
     this.nextBlock = Hasard(7);
     Graphic.drawNextBlock(this.nextBlock);    
+    if(this.checkLose == true){
+		alert("fin de la partie");
+		return false;
+    }
     routine = setInterval(function() {
       interval();
     }, 1000);
@@ -85,10 +89,17 @@ function Game() {
 			for(var j = 0; j < Taille(this.grid[l]); j++){
 				this.grid[l][j][0] = false;
 				this.grid[l][j][1] = undefined;
+            }
           }
         }
+        this.score += 100; 
+        this.lineScore++;
+        Graphic.drawInfo(this.level, this.score, this.lineScore);
       }
     }
-    }
-  };    
+  };
+  
+  this.checkLose = function(){
+  	return false;
+  };
 }
