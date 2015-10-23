@@ -31,6 +31,7 @@ function Game() {
   };
   this.start = function() {
     this.grid = this.block.draw(this.grid);
+    Graphic.drawNextBlock(this.nextBlock);
     this.debugGrid();
     routine = setInterval(function() {
       interval();
@@ -43,6 +44,7 @@ function Game() {
     routine = null;
     this.block = new Block(this.nextBlock, 0, 0);
     this.nextBlock = Hasard(7);
+    Graphic.drawNextBlock(this.nextBlock);    
     routine = setInterval(function() {
       interval();
     }, 1000);
