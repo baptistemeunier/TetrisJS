@@ -45,7 +45,7 @@ function Game() {
     this.block = new Block(this.nextBlock, 0, 0);
     this.nextBlock = Hasard(7);
     Graphic.drawNextBlock(this.nextBlock);    
-    if(this.checkLose == true){
+    if(this.checkLose() == true){
 		alert("fin de la partie");
 		return false;
     }
@@ -100,6 +100,11 @@ function Game() {
   };
   
   this.checkLose = function(){
-  	return false;
+    for (var i = 0; i < Taille(Game.grid[0]); i++) {
+      if(Game.grid[0][i][0] == true){
+        return true;
+      }  
+    }
+    return false;
   };
 }
