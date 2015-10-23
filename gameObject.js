@@ -46,7 +46,7 @@ function Game() {
     this.nextBlock = Hasard(7);
     Graphic.drawNextBlock(this.nextBlock);    
     if(this.checkLose() == true){
-		alert("fin de la partie");
+		Graphic.end();
 		return false;
     }
     routine = setInterval(function() {
