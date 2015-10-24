@@ -22,7 +22,10 @@ function Graphic() {
   this.initialiser = function() {
     Rectangle(this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);   
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut, 5 * this.c, 3 * this.c);
-    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 4 * this.c, 5 * this.c, 16 * this.c);
+    Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 12 , "Prochaine Piece", "black");
+    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 4 * this.c, 5 * this.c, 3 * this.c);
+    Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 4 * this.c + 12 , "Piece sauvegardée", "black");
+    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 8 * this.c, 5 * this.c, 12 * this.c);
     this.drawInfo(1, 0, 0);
   };
 
@@ -35,10 +38,10 @@ function Graphic() {
    *   @return void
    **/
   this.drawInfo = function(level, score, line) {
-    RectanglePlein(3 * this.bordGauche + 10 * this.c + 1, this.bordHaut + 4 * this.c + 1, 5 * this.c - 2, 16 * this.c - 2, "white");
-    Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 5 * this.c, "Niveau : " + level, "black");
-    Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 6 * this.c, "Score : " + score, "black");
-    Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 7 * this.c, "Ligne : " + line, "black");
+    RectanglePlein(3 * this.bordGauche + 10 * this.c + 1, this.bordHaut + 8 * this.c + 1, 5 * this.c - 2, 12 * this.c - 2, "white");
+    Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 9 * this.c, "Niveau : " + level, "black");
+    Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 10 * this.c, "Score : " + score, "black");
+    Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 11 * this.c, "Ligne : " + line, "black");
   };
 
   /** Methode drawInfo
@@ -58,6 +61,26 @@ function Graphic() {
       }
     }
   };
+  
+
+  /** Methode drawInfo
+   *   Met à jours le cadre des informations de la partie en cours
+   *
+   *   @params level Niveau du joueur
+   *   @params score Score du joueur
+   *   @params line Nombre de ligne detruite par le joueur
+   *   @return void
+   **/
+  this.changeSave = function(block) {
+    var coord = tetros[block][0];
+    RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + 4 * this.c + this.c / 2, 4 * this.c, 2 * this.c, "white");
+    for (var i = 0; i < Taille(coord); i++) {
+      for (var j = 0; j < Taille(coord[i]); j++) {
+        RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2 + coord[i][j] * this.c, this.bordHaut + 4 * this.c + this.c / 2 + i * this.c, this.c, this.c, color[block]);
+      }
+    }
+  };
+  
   
   this.majGrid = function(grid){
     RectanglePlein(this.bordGauche , this.bordHaut , 10 * this.c, 20 * this.c, "white");
