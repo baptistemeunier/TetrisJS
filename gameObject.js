@@ -29,6 +29,37 @@ function Game() {
       }
     }
   };
+  
+  this.control = function(key){
+    switch (key) {
+      case 16:
+        //Touche MAJ : Rotation 90° gauche
+        this.grid = this.block.rotate(this.grid, -1);
+        this.debugGrid();
+        break;
+      case 35:
+        // Touche Fin : Rotation 90° droite
+        this.grid = this.block.rotate(this.grid, 1);
+        this.debugGrid();
+        break;
+      case 37:
+        // Touche <- : Deplacement gauche
+        this.grid = this.block.move(this.grid, -1);
+        this.debugGrid();
+
+        break;
+      case 39:
+        // Touche -> : Deplacement droite
+        this.grid = this.block.move(this.grid, 1);
+        this.debugGrid();
+        break;
+      case 40:
+        // Touche BAS : Deplacement bas (soft drop)
+        this.grid = this.block.down(this.grid);
+        this.debugGrid();
+        break;
+      }
+  };
   this.start = function() {
     this.grid = this.block.draw(this.grid);
     Graphic.drawNextBlock(this.nextBlock);
