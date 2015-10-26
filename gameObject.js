@@ -35,6 +35,7 @@ function Game() {
     case 16:
       //Touche MAJ : Rotation 90° gauche
       this.grid = this.block.rotate(this.grid, -1);
+      this.debugGrid();
       break;
     case 35:
       // Touche Fin : Rotation 90° droite
@@ -58,8 +59,9 @@ function Game() {
       break;
     }
   };
+  
   this.saveBlock = function() {
-    if (this.save == this.block.type) {
+    if (this.save == this.block.type) { 
       return false;
     }
     Graphic.changeSave(this.block.type);
@@ -78,10 +80,10 @@ function Game() {
       interval();
     }, 1000);
   };
+  
   this.start = function() {
     this.grid = this.block.draw(this.grid);
     Graphic.drawNextBlock(this.nextBlock);
-    this.debugGrid();
     routine = setInterval(function() {
       interval();
     }, 1000);
@@ -92,8 +94,13 @@ function Game() {
     this.block = null;
     routine = null;
     this.block = new Block(this.nextBlock, 0, 0);
+    this.grid = this.block.draw(this.grid);
     this.nextBlock = Hasard(7);
     Graphic.drawNextBlock(this.nextBlock);
+//	if(this.score != 0){
+//		this.grid = this.block.bug(this.grid);
+//    }
+
     if (this.checkLose() == true) {
       Graphic.end();
       return false;
@@ -112,7 +119,6 @@ function Game() {
       }
       Ecrire(ret + " fin");
     }
-
     for (var i = 0; i < Taille(Game.grid); i++) {
       var ret = "";
       for (var j = 0; j < Taille(Game.grid[i]); j++) {
@@ -123,29 +129,28 @@ function Game() {
   };
 
   this.checkLine = function() {
-    for (var i = 0; i < Taille(Game.grid); i++) {
-      var complete = true;
-      for (var j = 0; j < Taille(Game.grid[i]); j++) {
-        if (Game.grid[i][j][0] == false) {
-          complete = false;
+	for (var i = 0; i < Taille(Game.grid); i++){
+		var complete;
+		for (var j = 0; j < Taille(Game.grid[i]); j++) {
+          if (Game.grid[i][j][0] == false) {
+            complete = false;
+          }          
         }
-      }
-      if (complete == true) {
-        for (var l = i; l > 0; l--) {
-          if (l != 0) {
-            Game.grid[l] = Game.grid[l - 1];
-          } else {
-            for (var j = 0; j < Taille(this.grid[l]); j++) {
-              this.grid[l][j][0] = false;
-              this.grid[l][j][1] = undefined;
-            }
-          }
+      if(complete == true) {
+        alert('complete');
+        for(var l = i; l > 0; l--) {
+            this.grid[l] = this.grid[l - 1];
+        }
+        for(var j = 0; j < Taille(this.grid[0]); j++) {
+            this.grid[0][j]    = Tableau(2);
+            this.grid[0][j][0] = false;
         }
         this.score += 100;
         this.lineScore++;
         Graphic.drawInfo(this.level, this.score, this.lineScore);
       }
     }
+
   };
 
   this.checkLose = function() {
