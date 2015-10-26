@@ -16,6 +16,7 @@ function Game() {
   this.grid = Tableau(20, 10); // Grille du plateau de jeu 
   this.block = new Block(Hasard(7), 0, 0); // Block du jeu en cours
   this.save = null; // Block mis en memoire
+  this.speed = 1000;
   /** Methode initialiser
    *   Crée la grille est lance la partie 
    *   @return void
@@ -32,29 +33,22 @@ function Game() {
 
   this.control = function(key) {
     switch (key) {
-    case 16:
-      //Touche MAJ : Rotation 90° gauche
+    case 16: //Touche MAJ : Rotation 90° gauche
       this.grid = this.block.rotate(this.grid, -1);
-      this.debugGrid();
       break;
-    case 35:
-      // Touche Fin : Rotation 90° droite
+    case 35: // Touche Fin : Rotation 90° droite
       this.grid = this.block.rotate(this.grid, 1);
       break;
-    case 37:
-      // Touche <- : Deplacement gauche
+    case 37: // Touche <- : Deplacement gauche
       this.grid = this.block.move(this.grid, -1);
       break;
-    case 39:
-      // Touche -> : Deplacement droite
+    case 39: // Touche -> : Deplacement droite
       this.grid = this.block.move(this.grid, 1);
       break;
-    case 40:
-      // Touche BAS : Deplacement bas (soft drop)
+    case 40: // Touche BAS : Deplacement bas (soft drop)
       this.grid = this.block.down(this.grid);
       break;
-    case 32:
-      // Touche ESPACE : Save block
+    case 32: // Touche ESPACE : Save block
       this.saveBlock();
       break;
     }
@@ -78,7 +72,7 @@ function Game() {
     this.save = save;
     routine = setInterval(function() {
       interval();
-    }, 1000);
+    }, this.speed);
   };
   
   this.start = function() {
@@ -86,7 +80,7 @@ function Game() {
     Graphic.drawNextBlock(this.nextBlock);
     routine = setInterval(function() {
       interval();
-    }, 1000);
+    }, this.speed);
   };
 
   this.next = function() {
@@ -97,17 +91,14 @@ function Game() {
     this.grid = this.block.draw(this.grid);
     this.nextBlock = Hasard(7);
     Graphic.drawNextBlock(this.nextBlock);
-//	if(this.score != 0){
-//		this.grid = this.block.bug(this.grid);
-//    }
-
+    
     if (this.checkLose() == true) {
       Graphic.end();
       return false;
     }
     routine = setInterval(function() {
       interval();
-    }, 1000);
+    }, this.speed);
   };
 
   this.debugGrid = function() {
@@ -129,28 +120,38 @@ function Game() {
   };
 
   this.checkLine = function() {
-	for (var i = 0; i < Taille(Game.grid); i++){
-		var complete;
+	var line=0;
+    for (var i = 0; i < Taille(Game.grid); i++){
+		var complete = true;
 		for (var j = 0; j < Taille(Game.grid[i]); j++) {
           if (Game.grid[i][j][0] == false) {
             complete = false;
           }          
         }
-      if(complete == true) {
-        alert('complete');
-        for(var l = i; l > 0; l--) {
-            this.grid[l] = this.grid[l - 1];
+      if(complete == true){
+        line++;
+        var oldgrid = this.grid;    
+        this.grid = Tableau(20, 10);
+        this.initialiser();
+        for (var l = 0; l < Taille(Game.grid); l++){
+          if(l > i){
+             this.grid[l] = oldgrid[l];
+          }else if(l < i){
+             this.grid[l+1] = oldgrid[l];
+          }
         }
-        for(var j = 0; j < Taille(this.grid[0]); j++) {
-            this.grid[0][j]    = Tableau(2);
-            this.grid[0][j][0] = false;
-        }
-        this.score += 100;
         this.lineScore++;
-        Graphic.drawInfo(this.level, this.score, this.lineScore);
       }
     }
-
+	if(line != 0){
+      this.score += ((line==1)?40:(line==2)?100:(line==3)?300:1200)*(this.level+1);
+      if(this.lineScore >= ((this.level+1)*10)){
+		this.level++;
+  		this.speed -= this.speed/5;
+      }
+      Graphic.drawInfo(this.level, this.score, this.lineScore);
+    }
+    
   };
 
   this.checkLose = function() {
