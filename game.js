@@ -12,7 +12,11 @@ var Game = new Game(); // Instance de l'objet Graphic
 var routine; // ...
 var stop = false;
 
-/* Gestion des controles en jeu */
+window.onkeyup = function(event) { // Lorsque qu'une touche est relaché
+	if(event.keyCode == 27){
+		Game.pause();
+    }
+};
 window.onkeydown = function(event) { // Lorsque qu'une touche est relaché
 	Game.control(event.keyCode);
 };
