@@ -7,8 +7,6 @@
  * @since v0.1.0--alpha
  *
  **/
-var tetros = JSON.parse(readFile("data/tetrominos.json"));
-var color = ["cyan", "yellow", "purple", "orange", "blue", "red", "lime"];
 
 function Graphic() {
 
@@ -26,7 +24,7 @@ function Graphic() {
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 4 * this.c, 5 * this.c, 3 * this.c);
     Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 4 * this.c + 12 , "Piece sauvegardée", "black");
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 8 * this.c, 5 * this.c, 12 * this.c);
-    this.drawInfo(1, 0, 0);
+    this.drawInfo(0, 0, 0);
   };
 
   /** Methode drawInfo
@@ -62,7 +60,13 @@ function Graphic() {
     }
   };
   
+	this.pause = function(){
+        RectanglePlein(this.bordGauche, this.bordHaut, 10 * this.c, 20 * this.c, "grey");
+      setCanvasFont("Arial", "35px", "bold"); // Selection de la police
+	    Texte(this.bordGauche + this.c, this.bordHaut + 10 * this.c, "Jeu en pause", "red");
+      setCanvasFont("Arial", "15px", "bold"); // Selection de la police
 
+    };
   /** Methode drawInfo
    *   Met à jours le cadre des informations de la partie en cours
    *
