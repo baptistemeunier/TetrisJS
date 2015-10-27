@@ -33,10 +33,15 @@ function Block(type) {
         grid[i + this.x][this.coord[i][j] + this.y][0] = true;
       }
     }
-    stop =true;
+    stop = true;
     return grid;
   };
-
+	this.hardDrop = function(grid){
+    	do{
+          grid = this.down(grid);
+        }while(stop == false);
+      return grid;
+    };
   /** Methode Remove de l'objet Block
    *   Permet d'effaser le tetromino de la grille
    *   @return void
