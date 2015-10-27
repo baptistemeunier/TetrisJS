@@ -17,6 +17,7 @@ function Game() {
   this.block = new Block(Hasard(7), 0, 0); // Block du jeu en cours
   this.save = null; // Block mis en memoire
   this.speed = 1000;
+  this.paused = false;
   /** Methode initialiser
    *   Crée la grille est lance la partie 
    *   @return void
@@ -32,6 +33,8 @@ function Game() {
   };
 
   this.control = function(key) {
+	if(this.paused)
+      return true;
     switch (key) {
     case 16: //Touche MAJ : Rotation 90° gauche
       this.grid = this.block.rotate(this.grid, -1);
@@ -74,6 +77,20 @@ function Game() {
       interval();
     }, this.speed);
   };
+  
+    this.pause = function() {
+      if(this.paused){
+        routine = setInterval(function() {
+          interval();
+        }, this.speed);
+        Graphic.majGrid(this.grid);
+      }else{
+          clearInterval(routine);
+          routine = null;
+        Graphic.pause();
+        }
+      this.paused = (this.paused==false)?true:false;
+	};
   
   this.start = function() {
     this.grid = this.block.draw(this.grid);
