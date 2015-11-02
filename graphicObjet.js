@@ -18,12 +18,17 @@ function Graphic() {
    *   @return void
    **/
   this.initialiser = function() {
+/*   */
+    RectanglePlein(0,0,1024,768, "#ebdfdf");
+	DrawImage('https://farm6.staticflickr.com/5099/5519580228_8dc57d7b3f_b_d.jpg', this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);
+    
     Rectangle(this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);   
-    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut, 5 * this.c, 3 * this.c);
+    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut, 5 * this.c, 3 * this.c, "red");
+    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 4 * this.c, 5 * this.c, 3 * this.c, "red");
+    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 8 * this.c, 5 * this.c, 12 * this.c, "red");
+    
     Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 12 , "Prochaine Piece", "black");
-    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 4 * this.c, 5 * this.c, 3 * this.c);
     Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 4 * this.c + 12 , "Piece sauvegardée", "black");
-    Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 8 * this.c, 5 * this.c, 12 * this.c);
     this.drawInfo(0, 0, 0);
   };
 
@@ -36,7 +41,7 @@ function Graphic() {
    *   @return void
    **/
   this.drawInfo = function(level, score, line) {
-    RectanglePlein(3 * this.bordGauche + 10 * this.c + 1, this.bordHaut + 8 * this.c + 1, 5 * this.c - 2, 12 * this.c - 2, "white");
+    RectanglePlein(3 * this.bordGauche + 10 * this.c + 1, this.bordHaut + 8 * this.c + 1, 5 * this.c - 2, 12 * this.c - 2, "#ebdfdf");
     Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 9 * this.c, "Niveau : " + level, "black");
     Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 10 * this.c, "Score : " + score, "black");
     Texte(3 * this.bordGauche + 10 * this.c + this.c / 4, this.bordHaut + 11 * this.c, "Ligne : " + line, "black");
@@ -52,7 +57,7 @@ function Graphic() {
    **/
   this.drawNextBlock = function(block) {
     var coord = tetros[block][0];
-    RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + this.c / 2, 4 * this.c, 2 * this.c, "white");
+    RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + this.c / 2, 4 * this.c, 2 * this.c, "#ebdfdf");
     for (var i = 0; i < Taille(coord); i++) {
       for (var j = 0; j < Taille(coord[i]); j++) {
         RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2 + coord[i][j] * this.c, this.bordHaut + this.c / 2 + i * this.c, this.c, this.c, color[block]);
@@ -77,7 +82,7 @@ function Graphic() {
    **/
   this.changeSave = function(block) {
     var coord = tetros[block][0];
-    RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + 4 * this.c + this.c / 2, 4 * this.c, 2 * this.c, "white");
+    RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + 4 * this.c + this.c / 2, 4 * this.c, 2 * this.c, "#ebdfdf");
     for (var i = 0; i < Taille(coord); i++) {
       for (var j = 0; j < Taille(coord[i]); j++) {
         RectanglePlein(3 * this.bordGauche + 10 * this.c + this.c / 2 + coord[i][j] * this.c, this.bordHaut + 4 * this.c + this.c / 2 + i * this.c, this.c, this.c, color[block]);
@@ -87,7 +92,7 @@ function Graphic() {
   
   
   this.majGrid = function(grid){
-    RectanglePlein(this.bordGauche , this.bordHaut , 10 * this.c, 20 * this.c, "white");
+	DrawImage('https://farm6.staticflickr.com/5099/5519580228_8dc57d7b3f_b_d.jpg', this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);
     for (var i = 0; i < Taille(grid); i++) {
       for (var j = 0; j < Taille(grid[i]); j++) {
         if (grid[i][j][0]) {
