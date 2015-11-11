@@ -125,13 +125,27 @@ function Game() {
 
     if (this.checkLose() == true) {
       Graphic.end();
+      for (var i = Taille(bestScores) - 1; i >= 0; i--) {
+        if (bestScores[i].score > this.score) {
+          bestScores.push({
+            "pseudo": pseudo,
+            "score": this.score
+          });
+          bestScores.sort(function(key1, key2) {
+            return key1.score < key2.score;
+          });
+          bestScores.pop();
+          writeFile("data/score.json", JSON.stringify(bestScores));
+          break;
+        }
+      }
       return false;
     }
+
     routine = setInterval(function() {
       interval();
     }, this.speed);
   };
-
   this.debugGrid = function() {
     EffacerEcran();
     for (var i = 0; i < Taille(Game.grid); i++) {
