@@ -19,17 +19,31 @@ function Graphic() {
    **/
   this.initialiser = function() {
 /*   */
+    setCanvasFont("Arial", "15px", "bold"); // Selection de la police
+
     RectanglePlein(0,0,1024,768, "#ebdfdf");
 	DrawImage('https://farm6.staticflickr.com/5099/5519580228_8dc57d7b3f_b_d.jpg', this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);
     
     Rectangle(this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);   
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut, 5 * this.c, 3 * this.c, "red");
+    Rectangle(3 * this.bordGauche + 17 * this.c, this.bordHaut, 12 * this.c, 10 * this.c, "red");
+    Rectangle(3 * this.bordGauche + 17 * this.c, this.bordHaut + 12 * this.c, 12 * this.c, 8 * this.c, "red");
+
+    
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 4 * this.c, 5 * this.c, 3 * this.c, "red");
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut + 8 * this.c, 5 * this.c, 12 * this.c, "red");
     
     Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 12 , "Prochaine Piece", "black");
     Texte(3 * this.bordGauche + 10 * this.c + this.c/2, this.bordHaut + 4 * this.c + 12 , "Piece sauvegardée", "black");
+    Texte(3 * this.bordGauche + 21 * this.c + this.c/2, this.bordHaut + 12 * this.c + this.c/2, "Meilleur joueur", "black");
+
+    setCanvasFont("Arial", "12px", "bold"); // Selection de la police
+    
+
     this.drawInfo(0, 0, 0);
+      for (var i = 0; i < Taille(bestScores); i++) {
+	    Texte(3 * this.bordGauche + 18 * this.c, this.bordHaut + 14 * this.c+ i*17, bestScores[i].pseudo + " avec un score de " + bestScores[i].score, "black");
+      }
   };
 
   /** Methode drawInfo
@@ -115,3 +129,5 @@ function Graphic() {
     }, 100);
   };
 }
+g = new Graphic();
+g.initialiser();
