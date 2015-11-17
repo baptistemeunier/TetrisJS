@@ -11,11 +11,12 @@ function Block(type) {
   this.color = color[type];
   this.x = 0;
   this.y = 5;
+  this.isDown = false;
 
   /* Gestion des controles en jeu */
 
   this.draw = function(grid) {
-    for(var i = 0; i < Taille(this.coord); i++) {
+    for (var i = 0; i < Taille(this.coord); i++) {
       for (var j = 0; j < Taille(this.coord[i]); j++) {
         grid[i + this.x][this.coord[i][j] + this.y][0] = 2;
         grid[i + this.x][this.coord[i][j] + this.y][1] = this.color;
@@ -33,15 +34,15 @@ function Block(type) {
         grid[i + this.x][this.coord[i][j] + this.y][0] = true;
       }
     }
-    stop = true;
+    this.isDown = true;
     return grid;
   };
-	this.hardDrop = function(grid){
-    	do{
-          grid = this.down(grid);
-        }while(stop == false);
-      return grid;
-    };
+  this.hardDrop = function(grid) {
+    do {
+      grid = this.down(grid);
+    } while (this.isDown == false);
+    return grid;
+  };
   /** Methode Remove de l'objet Block
    *   Permet d'effaser le tetromino de la grille
    *   @return void
@@ -71,17 +72,17 @@ function Block(type) {
       rotation = this.rotation + sens;
     }
     coord = tetros[this.type][rotation];
-    for(var i = 0; i < Taille(coord); i++) {
+    for (var i = 0; i < Taille(coord); i++) {
       for (var j = 0; j < Taille(coord[i]); j++) {
-        if(grid[i + this.x][coord[i][j] + this.y] == undefined || grid[i + this.x][coord[i][j] + this.y][0] == true){
-			return grid;
+        if (grid[i + this.x][coord[i][j] + this.y] == undefined || grid[i + this.x][coord[i][j] + this.y][0] == true) {
+          return grid;
         }
       }
     }
     this.rotation = rotation;
     this.coord = coord;
     this.draw(grid);
-	return grid;
+    return grid;
   };
 
   /** Methode Rotate de l'objet Block

@@ -20,10 +20,12 @@ function Game() {
   this.paused = false; // true si le jeu est en pause
   this.generatorList = [0, 1, 2, 3, 4, 5, 6];
   this.generatorKey = -1;
+  this.blockdown = false;
   /** Methode initialiser
    *   Crée la grille de jeu 
    *   @return void
    **/
+
   this.initialiser = function() {
     //On initialise le tableau grille du jeu
     for (var i = 0; i < Taille(this.grid); i++) {
@@ -146,12 +148,13 @@ function Game() {
   this.next = function() {
     this.checkLine();
     this.block = null;
-    routine = null;
+    this.routine = null;
     this.block = new Block(this.nextBlock, 0, 0);
     this.grid = this.block.draw(this.grid);
     this.nextBlock = this.findNextBlock();
     Graphic.drawNextBlock(this.nextBlock);
-
+	clearInterval(this.routine);
+    routine = null;
     if (this.checkLose() == true) {
       Graphic.end();
       for (var i = Taille(bestScores) - 1; i >= 0; i--) {
