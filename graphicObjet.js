@@ -20,7 +20,7 @@ function Graphic() {
   this.initialiser = function() { /*   */
     setCanvasFont("Arial", "15px", "bold"); // Selection de la police
     RectanglePlein(0, 0, 1024, 768, "#ebdfdf");
-    DrawImage('https://farm6.staticflickr.com/5099/5519580228_8dc57d7b3f_b_d.jpg', this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);
+    RectanglePlein(this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2, "white");
     Rectangle(this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);
     Rectangle(3 * this.bordGauche + 10 * this.c, this.bordHaut, 5 * this.c, 3 * this.c, "red");
     Rectangle(3 * this.bordGauche + 17 * this.c, this.bordHaut, 12 * this.c, 10 * this.c, "red");
@@ -36,11 +36,6 @@ function Graphic() {
     Texte(3 * this.bordGauche + 17.2 * this.c + this.c / 2, this.bordHaut + 100, "RIGHT : Deplacement droite", "black");
     Texte(3 * this.bordGauche + 17.2 * this.c + this.c / 2, this.bordHaut + 120, "MAJ : Rotation -90°", "black");
     Texte(3 * this.bordGauche + 17.2 * this.c + this.c / 2, this.bordHaut + 140, "FIN : Rotation +90°", "black");
-/* for (var i = 0; i < Taille(tetros[5][0]); i++) {
-      for (var j = 0; j < Taille(tetros[5][0][i]); j++) {
-        RectanglePlein(3 * this.bordGauche + 21 * this.c + this.c / 2 + tetros[5][0][i][j] * this.c, this.bordHaut + this.c + i * this.c, this.c, this.c, "red");
-      }
-    }*/
     Texte(3 * this.bordGauche + 21 * this.c + this.c / 2, this.bordHaut + 12, "Help box", "black");
     Texte(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + 12, "Prochaine Piece", "black");
     Texte(3 * this.bordGauche + 10 * this.c + this.c / 2, this.bordHaut + 4 * this.c + 12, "Piece sauvegardée", "black");
@@ -112,7 +107,7 @@ function Graphic() {
 
 
   this.majGrid = function(grid) {
-    DrawImage('https://farm6.staticflickr.com/5099/5519580228_8dc57d7b3f_b_d.jpg', this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2);
+    RectanglePlein(this.bordGauche - 1, this.bordHaut - 1, 10 * this.c + 2, 20 * this.c + 2, "white");
     for (var i = 0; i < Taille(grid); i++) {
       for (var j = 0; j < Taille(grid[i]); j++) {
         if (grid[i][j][0]) {
