@@ -130,5 +130,3 @@ function Graphic() {
     }, 100);
   };
 }
-g = new Graphic();
-g.initialiser();
