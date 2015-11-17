@@ -12,12 +12,14 @@ function Game() {
   this.score = 0; // Score du joueur
   this.level = 0; // Niveau du joueur
   this.lineScore = 0; // Nombre de ligne detruite
-  this.nextBlock = Hasard(7); // Id de la prochaine piéce
+  this.nextBlock = null; // Id de la prochaine piéce
   this.grid = Tableau(20, 10); // Grille du plateau de jeu 
-  this.block = new Block(Hasard(7), 0, 0); // Block du jeu en cours
+  this.block = null; // Block du jeu en cours
   this.save = null; // Block mis en memoire
   this.speed = 1000; // Vitesse de descente des blocks
   this.paused = false; // true si le jeu est en pause
+  this.generatorList = [0, 1, 2, 3, 4, 5, 6];
+  this.generatorKey = -1;
   /** Methode initialiser
    *   Crée la grille de jeu 
    *   @return void
@@ -30,7 +32,34 @@ function Game() {
         this.grid[i][j][0] = false;
       }
     }
+    this.generateList();
+    this.block = new Block(this.findNextBlock(), 0, 0);
+    this.nextBlock = this.findNextBlock();
+
   };
+  this.generateList = function() {
+    var key = 7;
+    var tampon, random;
+
+    for (i = 6; i >= 0; i--) {
+      // Pick a remaining element...
+      random = Math.floor(Math.random() * i);
+
+      // And swap it with the current element.
+      tampon = this.generatorList[i];
+      this.generatorList[i] = this.generatorList[random];
+      this.generatorList[random] = tampon;
+    }
+  };
+  this.findNextBlock = function() {
+    this.generatorKey++;
+    if(this.generatorKey == 7) {
+      this.generatorKey = 0;
+      this.generateList();
+    }
+    return this.generatorList[this.generatorKey];
+  };
+
 
   /** Methode control
    *   Gere les controles en jeu (touche de jeu)
@@ -120,7 +149,7 @@ function Game() {
     routine = null;
     this.block = new Block(this.nextBlock, 0, 0);
     this.grid = this.block.draw(this.grid);
-    this.nextBlock = Hasard(7);
+    this.nextBlock = this.findNextBlock();
     Graphic.drawNextBlock(this.nextBlock);
 
     if (this.checkLose() == true) {
