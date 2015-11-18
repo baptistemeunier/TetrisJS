@@ -9,55 +9,59 @@
 
 function Game() {
 
-  this.score = 0; // Score du joueur
-  this.level = 0; // Niveau du joueur
-  this.lineScore = 0; // Nombre de ligne detruite
-  this.nextBlock = null; // Id de la prochaine piéce
-  this.grid = Tableau(20, 10); // Grille du plateau de jeu 
-  this.block = null; // Block du jeu en cours
-  this.save = null; // Block mis en memoire
-  this.speed = 1000; // Vitesse de descente des blocks
-  this.paused = false; // true si le jeu est en pause
-  this.generatorList = [0, 1, 2, 3, 4, 5, 6];
-  this.generatorKey = -1;
-  this.blockdown = false;
+  this.score = 0; // Entier : Score du joueur
+  this.level = 0; // Entier : Niveau du joueur
+  this.lineScore = 0; // Entier : Nombre de ligne detruite
+  this.nextBlock = null; // Entier : Id de la prochaine piéce
+  this.grid = Tableau(20, 10); // Tableau : Grille du plateau de jeu 
+  this.block = null; // Object Block : Block du jeu en cours
+  this.save = null; // Entier : Block mis en memoire
+  this.speed = 1000; // Entier : Vitesse de descente des blocks
+  this.paused = false; // Le jeu est t'il en pause ?
+  this.generatorList = [0, 1, 2, 3, 4, 5, 6]; // Tableau qui génere les piéces
+  this.generatorKey = -1; // Prochaine pieces à génerer (n+1)
+  this.pseudo = ""; // Pseudo de la personne qui joue
   /** Methode initialiser
    *   Crée la grille de jeu 
    *   @return void
    **/
-
-  this.initialiser = function() {
-    //On initialise le tableau grille du jeu
+  this.initialiser = function() { /* On initialise le tableau grille du jeu */
     for (var i = 0; i < Taille(this.grid); i++) {
       for (var j = 0; j < Taille(this.grid[i]); j++) {
         this.grid[i][j] = Tableau(2);
         this.grid[i][j][0] = false;
       }
     }
-    this.generateList();
-    this.block = new Block(this.findNextBlock(), 0, 0);
-    this.nextBlock = this.findNextBlock();
-
+    this.generateList(); // On génere un liste de aleatoire des piéces
+    this.block = new Block(this.findNextBlock(), 0, 0); // On crée la piéce
+    this.nextBlock = this.findNextBlock(); // On prépare la prochaine piéce
   };
+
+  /** Methode generateList
+   *   génere un liste de aleatoire des 7 prochaines piéces.
+   *   @return void
+   **/
   this.generateList = function() {
-    var key = 7;
     var tampon, random;
 
     for (i = 6; i >= 0; i--) {
-      // Pick a remaining element...
-      random = Math.floor(Math.random() * i);
-
-      // And swap it with the current element.
+      random = Math.floor(Math.random() * i); // On prends un chiffre au hasard
+      /* Puis on procéde a un échange de variable */
       tampon = this.generatorList[i];
       this.generatorList[i] = this.generatorList[random];
       this.generatorList[random] = tampon;
     }
   };
+
+  /** Methode findNextBlock
+   *   Cherche la prochaine piéce de la liste
+   *   @return void
+   **/
   this.findNextBlock = function() {
     this.generatorKey++;
-    if(this.generatorKey == 7) {
+    if (this.generatorKey == 7) { // Si on sort du tableau 
       this.generatorKey = 0;
-      this.generateList();
+      this.generateList(); // On en crée un nouveau
     }
     return this.generatorList[this.generatorKey];
   };
@@ -102,65 +106,75 @@ function Game() {
     }
   };
 
+  /** Methode saveBlock
+   *   Sauvegarde la piéce
+   *   @params key : Code de la touche (integer)
+   *   @return void
+   **/
   this.saveBlock = function() {
-    if (this.save == this.block.type) {
-      return false;
+    if (this.save == this.block.type) { // Si la piéce est identique
+      return false; // On annule
     }
-    Graphic.changeSave(this.block.type);
-    clearInterval(routine);
-    this.grid = this.block.remove(this.grid);
-    if (this.save == null) {
-      this.save = this.block.type;
-      return this.next();
+    Graphic.changeSave(this.block.type); // On affiche graphiuement le piéce
+    clearInterval(routine); // On arrete le jeu
+    this.grid = this.block.remove(this.grid); // On efface le piéce
+    if (this.save == null) { // Si il n'a pas de piéce sauvegardé
+      this.save = this.block.type; // On met la piéce en memoire
+      return this.next(); // On lance la prochaine piéce
     }
-    var save = this.block.type;
+    var save = this.block.type; // On stoque la piece
     this.block = null;
     routine = null;
-    this.block = new Block(this.save, 0, 0);
-    this.save = save;
-    routine = setInterval(function() {
+    this.block = new Block(this.save, 0, 0); // On utilise la piéce précedament mise en memoire  
+    this.save = save; // On met la piéce en memoire
+    routine = setInterval(function() { // On redemarre le jeu
       interval();
     }, this.speed);
   };
-
+  
+  /** Methode pause
+   *   Sert à mettre la jeu en pause
+   *   @return void
+   **/
   this.pause = function() {
-    if (this.paused) {
-      routine = setInterval(function() {
+    if (this.paused) { // Si le jeu est en pause
+      routine = setInterval(function() { // O, redemarre le jeu
         interval();
       }, this.speed);
-      Graphic.majGrid(this.grid);
-    } else {
-      clearInterval(routine);
-      routine = null;
-      Graphic.pause();
+      Graphic.majGrid(this.grid); // Est on affiche la grille
+    } else { // Sinom
+      clearInterval(routine); // On arrete le jeu
+      routine = null; 
+      Graphic.pause(); // On affiche PAUSE en graphique
     }
-    this.paused = (this.paused == false) ? true : false;
+    this.paused = (this.paused == false) ? true : false; // On change l'etat de la pause
   };
-
+  /** Methode start
+   *   Permet de lancée la partie
+   *   @return void
+   **/
   this.start = function() {
-    this.grid = this.block.draw(this.grid);
-    Graphic.drawNextBlock(this.nextBlock);
-    routine = setInterval(function() {
+    this.grid = this.block.draw(this.grid); // On affiche la piéce (grille)
+    Graphic.drawNextBlock(this.nextBlock); // On affiche la piéce (graphic)
+    routine = setInterval(function() { // On demarrre la jeu
       interval();
     }, this.speed);
   };
-
+  
+  /** Methode next
+   *   Permet de passer à la piéce suivantes
+   *   @return void
+   **/
   this.next = function() {
-    this.checkLine();
+    this.checkLine(); // On detruit les lignes complétée
     this.block = null;
     this.routine = null;
-    this.block = new Block(this.nextBlock, 0, 0);
-    this.grid = this.block.draw(this.grid);
-    this.nextBlock = this.findNextBlock();
-    Graphic.drawNextBlock(this.nextBlock);
-	clearInterval(this.routine);
-    routine = null;
     if (this.checkLose() == true) {
       Graphic.end();
       for (var i = Taille(bestScores) - 1; i >= 0; i--) {
         if (bestScores[i].score > this.score) {
           bestScores.push({
-            "pseudo": pseudo,
+            "pseudo": this.pseudo,
             "score": this.score
           });
           bestScores.sort(function(key1, key2) {
@@ -173,11 +187,19 @@ function Game() {
       }
       return false;
     }
+    this.block = new Block(this.nextBlock, 0, 0); // On crée le nouvelle piéce 
+    this.grid = this.block.draw(this.grid);// On affiche la piéce (grille)
+    this.nextBlock = this.findNextBlock(); // On prepare le prochain block
+    Graphic.drawNextBlock(this.nextBlock); // On affiche la piéce (graphic)
+    clearInterval(this.routine);
+    routine = null;
+
 
     routine = setInterval(function() {
       interval();
     }, this.speed);
   };
+  /* Fonction de tets qui permet de lire la grille
   this.debugGrid = function() {
     EffacerEcran();
     for (var i = 0; i < Taille(Game.grid); i++) {
@@ -195,7 +217,12 @@ function Game() {
       Ecrire(ret + " fin");
     }
   };
-
+	*/
+  
+  /** Methode checkline
+   *   Detruit les lignes compléte
+   *   @return void
+   **/
   this.checkLine = function() {
     var line = 0;
     for (var i = 0; i < Taille(Game.grid); i++) {
@@ -230,7 +257,10 @@ function Game() {
     }
 
   };
-
+  /** Methode checklose
+   *   Permet de détecter la fin de la partie
+   *   @return void
+   **/
   this.checkLose = function() {
     for (var i = 0; i < Taille(Game.grid[0]); i++) {
       if (Game.grid[0][i][0] == true) {
