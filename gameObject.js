@@ -188,6 +188,8 @@ function Game() {
         }
       }
       Graphic.drawBestscore();
+      window.onkeyup = null;
+      window.onkeydown = null;
       return false;
     }
     this.block = new Block(this.nextBlock, 0, 0); // On crée le nouvelle piéce 
