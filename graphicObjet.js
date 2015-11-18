@@ -43,11 +43,22 @@ function Graphic() {
 
     setCanvasFont("Arial", "12px", "bold"); // Selection de la police
     this.drawInfo(0, 0, 0); // Ecriture du scrore
+	this.drawBestscore();
+  };
+  /** Methode drawInfo
+   *   Met à jours le cadre des informations de la partie en cours
+   *
+   *   @params level Niveau du joueur
+   *   @params score Score du joueur
+   *   @params line Nombre de ligne detruite par le joueur
+   *   @return void
+   **/
+  this.drawBestscore = function(level, score, line) {
+    RectanglePlein(3 * this.bordGauche + 17 * this.c + 2, this.bordHaut + 13 * this.c + 2, 10 * this.c-2, 6 * this.c-2, "#ebdfdf");
     for (var i = 0; i < Taille(bestScores); i++) { // Affiche des meuilleur scores
       Texte(3 * this.bordGauche + 18 * this.c, this.bordHaut + 14 * this.c + i * 17, bestScores[i].pseudo + " avec un score de " + bestScores[i].score, "black");
-    }
-  };
-
+      }	
+      };
   /** Methode drawInfo
    *   Met à jours le cadre des informations de la partie en cours
    *
