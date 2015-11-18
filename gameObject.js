@@ -131,7 +131,7 @@ function Game() {
       interval();
     }, this.speed);
   };
-  
+
   /** Methode pause
    *   Sert à mettre la jeu en pause
    *   @return void
@@ -144,7 +144,7 @@ function Game() {
       Graphic.majGrid(this.grid); // Est on affiche la grille
     } else { // Sinom
       clearInterval(routine); // On arrete le jeu
-      routine = null; 
+      routine = null;
       Graphic.pause(); // On affiche PAUSE en graphique
     }
     this.paused = (this.paused == false) ? true : false; // On change l'etat de la pause
@@ -160,7 +160,7 @@ function Game() {
       interval();
     }, this.speed);
   };
-  
+
   /** Methode next
    *   Permet de passer à la piéce suivantes
    *   @return void
@@ -172,7 +172,7 @@ function Game() {
     if (this.checkLose() == true) {
       Graphic.end();
       for (var i = Taille(bestScores) - 1; i >= 0; i--) {
-        if (bestScores[i].score > this.score) {
+        if (bestScores[i].score < this.score) {
           bestScores.push({
             "pseudo": this.pseudo,
             "score": this.score
@@ -180,7 +180,9 @@ function Game() {
           bestScores.sort(function(key1, key2) {
             return key1.score < key2.score;
           });
-          bestScores.pop();
+          if (bestScores.length > 10) {
+            bestScores.pop();
+          }
           writeFile("data/score.json", JSON.stringify(bestScores));
           break;
         }
@@ -188,7 +190,7 @@ function Game() {
       return false;
     }
     this.block = new Block(this.nextBlock, 0, 0); // On crée le nouvelle piéce 
-    this.grid = this.block.draw(this.grid);// On affiche la piéce (grille)
+    this.grid = this.block.draw(this.grid); // On affiche la piéce (grille)
     this.nextBlock = this.findNextBlock(); // On prepare le prochain block
     Graphic.drawNextBlock(this.nextBlock); // On affiche la piéce (graphic)
     clearInterval(this.routine);
@@ -199,7 +201,7 @@ function Game() {
       interval();
     }, this.speed);
   };
-  /* Fonction de tets qui permet de lire la grille
+/* Fonction de tets qui permet de lire la grille
   this.debugGrid = function() {
     EffacerEcran();
     for (var i = 0; i < Taille(Game.grid); i++) {
@@ -218,7 +220,7 @@ function Game() {
     }
   };
 	*/
-  
+
   /** Methode checkline
    *   Detruit les lignes compléte
    *   @return void
