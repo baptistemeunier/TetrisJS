@@ -172,7 +172,7 @@ function Game() {
     if (this.checkLose() == true) {
       Graphic.end();
       for (var i = Taille(bestScores) - 1; i >= 0; i--) {
-        if (bestScores[i].score < this.score) {
+        if (bestScores[i].score < this.score || bestScores.length < 10) {
           bestScores.push({
             "pseudo": this.pseudo,
             "score": this.score
