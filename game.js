@@ -10,7 +10,6 @@ var color = ["cyan", "yellow", "purple", "orange", "blue", "red", "lime"]; // Ta
 var Graphic = new Graphic(); // Instance de l'objet Graphic
 var Game = new Game(); // Instance de l'objet Game
 var routine; // Variable qui contient le setInverval() 
-
 window.onkeyup = function(event) { // Lorsque qu'une touche est relachée
   if (event.keyCode == 27) { // Touche echap
     Game.pause();
@@ -26,11 +25,16 @@ function interval() { // Fonction qui gére la routine du jeu
     clearInterval(routine); // On arrete le routine
     Game.next(); // On recommence
   }
-}
-/* On initialise les objects */
+} /* On initialise les objects */
 Game.initialiser();
 Graphic.initialiser();
 Game.pseudo = Saisie("Merci de saisir votre pseudo");
+var file = ImportSon("Data/song.wav");
+var sr = SampleRate("Data/song.wav");
+var son = CreerSon(file, sr * (Game.speed / 1000));
 
-/* On demarre la partie */
+setInterval(function() {
+  son.play();
+
+}, 7500); /* On demarre la partie */
 Game.start();
